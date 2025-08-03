@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using GLTFast;
 using System.Threading.Tasks;
 using System;
+using UnityEngine.Animations;
 
 [System.Serializable]
 public class AssetJson
@@ -95,9 +96,12 @@ public class AssetPackageDownloader : MonoBehaviour
             {
                 Debug.Log("Creating game object " + ajs.name);
                 gltfGO = new GameObject(ajs.name);
-                gltfGO.transform.localScale = transform.localScale;
-                gltfGO.transform.localRotation = transform.localRotation;
-                gltfGO.transform.localPosition = transform.localPosition;
+                Debug.Log("Scale: " + ajs.scale[0] + " " + ajs.scale[1] + " " + ajs.scale[2]);
+                Debug.Log("Rotation: " + ajs.rotation[0] + " " + ajs.rotation[1] + " " + ajs.rotation[2]);
+                Debug.Log("Position: " + ajs.position[0] + " " + ajs.position[1] + " " + ajs.position[2]);
+                gltfGO.transform.localScale = new Vector3(ajs.scale[0], ajs.scale[1], ajs.scale[2]);
+                gltfGO.transform.localRotation = Quaternion.Euler(new Vector3(ajs.rotation[0], ajs.rotation[1], ajs.rotation[2]));
+                gltfGO.transform.localPosition = new Vector3(ajs.position[0], ajs.position[1], ajs.position[2]);
                 gltfGO.transform.SetParent(transform, worldPositionStays: false);
                 await importer.InstantiateMainSceneAsync(gltfGO.transform);
 
