@@ -105,6 +105,7 @@ public class AssetPackageDownloader : MonoBehaviour
                 gltfGO.transform.SetParent(transform, worldPositionStays: false);
                 await importer.InstantiateMainSceneAsync(gltfGO.transform);
 
+                // gltfGO.SetActive(false);
                 Debug.Log("Created: " + ajs.geometryurl);
             }
         }
