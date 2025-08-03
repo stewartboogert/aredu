@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using GLTFast;
+using System.Threading.Tasks;
+using System;
 
 [System.Serializable]
 public class AssetJson
@@ -14,6 +15,10 @@ public class AssetJson
     public float artokenysize;
     public string geometryurl;
     public string dataurl;
+
+    public float[] scale = { 1, 1, 1 };
+    public float[] position = { 0, 0, 0 };
+    public float[] rotation = { 0, 0, 0 };
 }
 
 public class Asset
@@ -40,10 +45,12 @@ public class AssetPackageDownloader : MonoBehaviour
 
     private List<Asset> assets = new List<Asset>();
 
-    void Start()
+    private GameObject gltfGO; 
+
+    async Task Start()
     {
         Debug.Log("Start");
-        StartCoroutine(DownloadAndParseJson());
+        await DownloadAndParseJson();
     }
 
     void Update()
@@ -51,11 +58,11 @@ public class AssetPackageDownloader : MonoBehaviour
 
     }
 
-    IEnumerator DownloadAndParseJson()
+    async Task DownloadAndParseJson()
     {
         Debug.Log("DownloadJson");
         UnityWebRequest request = UnityWebRequest.Get(assetPackageJsonUrl);
-        yield return request.SendWebRequest();
+        await request.SendWebRequest();
         jsonText = request.downloadHandler.text;
         Debug.Log("DownloadJson: " + jsonText);
 
@@ -75,19 +82,27 @@ public class AssetPackageDownloader : MonoBehaviour
 
             // ar token 
             request = UnityWebRequestTexture.GetTexture(ajs.artokenurl);
-            yield return request.SendWebRequest();
+            await request.SendWebRequest();
             asset.artoken = DownloadHandlerTexture.GetContent(request);
 
             // ar geometry
-            request = UnityWebRequest.Get(ajs.geometryurl);
-            yield return request.SendWebRequest();
-            byte[] glbData = request.downloadHandler.data;
+            Debug.Log("GLTF importing: " + ajs.geometryurl);
+            GltfImport importer = new();
+            bool success = await importer.Load(new Uri(ajs.geometryurl));
 
-            var gltf = new GltfImport();
-            yield return gltf.LoadGltfBinary(glbData);
+            Debug.Log("GLTF Load success " + success);
+            if (success)
+            {
+                Debug.Log("Creating game object " + ajs.name);
+                gltfGO = new GameObject(ajs.name);
+                gltfGO.transform.localScale = transform.localScale;
+                gltfGO.transform.localRotation = transform.localRotation;
+                gltfGO.transform.localPosition = transform.localPosition;
+                gltfGO.transform.SetParent(transform, worldPositionStays: false);
+                await importer.InstantiateMainSceneAsync(gltfGO.transform);
 
-            gltf.InstantiateMainScene(transform);
-
+                Debug.Log("Created: " + ajs.geometryurl);
+            }
         }
     }
 }
