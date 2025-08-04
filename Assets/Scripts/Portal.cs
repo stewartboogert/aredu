@@ -19,38 +19,38 @@ public class Portal : MonoBehaviour
         window.name = "window_quad";
         window.transform.localPosition = new UnityEngine.Vector3(0f, 0f, 0f);
         window.transform.localScale = new UnityEngine.Vector3(width, height, thickness);
-        window.transform.SetParent(parentObject.transform, worldPositionStays: false);            
+        window.transform.SetParent(transform, worldPositionStays: false);            
 
         GameObject top = GameObject.CreatePrimitive(PrimitiveType.Cube);
         top.name = "window_top";
         top.transform.localPosition = new UnityEngine.Vector3(0, height / 2.0f, 0);
         top.transform.localScale = new UnityEngine.Vector3(width, thickness, thickness);
-        top.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        top.transform.SetParent(transform, worldPositionStays: false);
 
         GameObject bottom = GameObject.CreatePrimitive(PrimitiveType.Cube);
         bottom.name = "window_bottom";
         bottom.transform.localPosition = new UnityEngine.Vector3(0, -height / 2.0f, 0);
         bottom.transform.localScale = new UnityEngine.Vector3(width, thickness, thickness);
-        bottom.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        bottom.transform.SetParent(transform, worldPositionStays: false);
 
         GameObject right = GameObject.CreatePrimitive(PrimitiveType.Cube);
         right.name = "window_right";
         right.transform.localPosition = new UnityEngine.Vector3(width / 2.0f, 0, 0);
         right.transform.localScale = new UnityEngine.Vector3(thickness, height, thickness);
-        right.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        right.transform.SetParent(transform, worldPositionStays: false);
 
 
         GameObject left = GameObject.CreatePrimitive(PrimitiveType.Cube);
         left.name = "window_left";
         left.transform.localPosition = new UnityEngine.Vector3(-width / 2.0f, 0, 0);
         left.transform.localScale = new UnityEngine.Vector3(thickness, height, thickness);
-        left.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        left.transform.SetParent(transform, worldPositionStays: false);
 
         GameObject back_wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         back_wall.name = "back_wall";
         back_wall.transform.localScale = new UnityEngine.Vector3(width, height, thickness);
         back_wall.transform.localPosition = new UnityEngine.Vector3(0f, 0f, depth);
-        back_wall.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        back_wall.transform.SetParent(transform, worldPositionStays: false);
 
 
         GameObject left_wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -58,28 +58,28 @@ public class Portal : MonoBehaviour
         left_wall.transform.localScale = new UnityEngine.Vector3(width, height, thickness);
         left_wall.transform.localRotation = UnityEngine.Quaternion.Euler(0, 90, 0);
         left_wall.transform.localPosition = new UnityEngine.Vector3(-width / 2.0f, 0f, depth / 2.0f);
-        left_wall.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        left_wall.transform.SetParent(transform, worldPositionStays: false);
 
         GameObject right_wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         right_wall.name = "right_wall";
         right_wall.transform.localScale = new UnityEngine.Vector3(width, height, thickness);
         right_wall.transform.localRotation = UnityEngine.Quaternion.Euler(0, -90, 0);
         right_wall.transform.localPosition = new UnityEngine.Vector3(width / 2.0f, 0f, depth / 2.0f);
-        right_wall.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        right_wall.transform.SetParent(transform, worldPositionStays: false);
 
         GameObject top_wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         top_wall.name = "top_wall";
         top_wall.transform.localScale = new UnityEngine.Vector3(width, height, thickness);
         top_wall.transform.localRotation = UnityEngine.Quaternion.Euler(90, 0, 0);
         top_wall.transform.localPosition = new UnityEngine.Vector3(0, height / 2.0f, depth / 2.0f);
-        top_wall.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        top_wall.transform.SetParent(transform, worldPositionStays: false);
 
         GameObject bottom_wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         bottom_wall.name = "bottom_wall";
         bottom_wall.transform.localScale = new UnityEngine.Vector3(width, height, thickness);
         bottom_wall.transform.localRotation = UnityEngine.Quaternion.Euler(-90, 0, 0);
         bottom_wall.transform.localPosition = new UnityEngine.Vector3(0, -height / 2.0f, depth / 2.0f);
-        bottom_wall.transform.SetParent(parentObject.transform, worldPositionStays: false);
+        bottom_wall.transform.SetParent(transform, worldPositionStays: false);
 
         Shader shader = Shader.Find("Universal Render Pipeline/Lit"); // or "Universal Render Pipeline/Lit" for URP
         Material frame_mat = new Material(shader);
@@ -93,32 +93,20 @@ public class Portal : MonoBehaviour
         Material window_mat = Resources.Load<Material>("Materials/PortalWindow");
         window.GetComponent<Renderer>().material = window_mat;
 
-        //Shader portal_shader = Shader.Find("Custom/StencilFilter");
-        //Material portal_mat = new Material(portal_shader);
+        Material backwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
+        backwall_mat.SetColor("_Color", Color.red);
 
-        //Material portal_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
-        //portal_mat.color = Color.red;
-        //Material backwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
-        //backwall_mat.color = Color.blue;
-        //Material leftwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
-        //leftwall_mat.color = Color.green;
-        //Material rightwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
-        //rightwall_mat.color = Color.white;
+        Material leftwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
+        leftwall_mat.SetColor("_Color", Color.blue);
 
-        Material backwall_mat = new Material(Resources.Load<Material>("Materials/LitStencil"));
-        backwall_mat.SetColor("_Base_Color", Color.red);
+        Material rightwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
+        rightwall_mat.SetColor("_Color", Color.yellow);
 
-        Material leftwall_mat = new Material(Resources.Load<Material>("Materials/LitStencil"));
-        leftwall_mat.SetColor("_Base_Color", Color.blue);
+        Material topwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
+        topwall_mat.SetColor("_Color", Color.gray);
 
-        Material rightwall_mat = new Material(Resources.Load<Material>("Materials/LitStencil"));
-        rightwall_mat.SetColor("_Base_Color", Color.yellow);
-
-        Material topwall_mat = new Material(Resources.Load<Material>("Materials/LitStencil"));
-        topwall_mat.SetColor("_Base_Color", Color.gray);
-
-        Material bottomwall_mat = new Material(Resources.Load<Material>("Materials/LitStencil"));
-        bottomwall_mat.SetColor("_Base_Color", Color.green);
+        Material bottomwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
+        bottomwall_mat.SetColor("_Color", Color.green);
 
         back_wall.GetComponent<Renderer>().material = backwall_mat;
         left_wall.GetComponent<Renderer>().material = leftwall_mat;
