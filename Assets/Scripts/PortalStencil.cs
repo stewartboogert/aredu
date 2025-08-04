@@ -3,7 +3,6 @@ using System.Numerics;
 
 public class PortalStencil : MonoBehaviour
 {
-    public GameObject parentObject;
     public float width = 1f;
     public float height = 1f;
     public float depth = 1f;
