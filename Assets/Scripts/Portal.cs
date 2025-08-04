@@ -19,7 +19,7 @@ public class Portal : MonoBehaviour
         window.name = "window_quad";
         window.transform.localPosition = new UnityEngine.Vector3(0f, 0f, 0f);
         window.transform.localScale = new UnityEngine.Vector3(width, height, thickness);
-        window.transform.SetParent(transform, worldPositionStays: false);            
+        window.transform.SetParent(transform, worldPositionStays: false);
 
         GameObject top = GameObject.CreatePrimitive(PrimitiveType.Cube);
         top.name = "window_top";
@@ -89,7 +89,7 @@ public class Portal : MonoBehaviour
 
         //Shader window_shader = Shader.Find("Custom/PortalWindow");
         //Material window_mat = new Material(window_shader);
-        
+
         Material window_mat = Resources.Load<Material>("Materials/PortalWindow");
         window.GetComponent<Renderer>().material = window_mat;
 
@@ -108,16 +108,24 @@ public class Portal : MonoBehaviour
         Material bottomwall_mat = new Material(Resources.Load<Material>("Materials/StencilFilter"));
         bottomwall_mat.SetColor("_Color", Color.green);
 
+        // set internal wall materials
         back_wall.GetComponent<Renderer>().material = backwall_mat;
         left_wall.GetComponent<Renderer>().material = leftwall_mat;
         right_wall.GetComponent<Renderer>().material = rightwall_mat;
         top_wall.GetComponent<Renderer>().material = topwall_mat;
         bottom_wall.GetComponent<Renderer>().material = bottomwall_mat;
 
+        // set frame material
         top.GetComponent<Renderer>().material = frame_mat;
         bottom.GetComponent<Renderer>().material = frame_mat;
         left.GetComponent<Renderer>().material = frame_mat;
         right.GetComponent<Renderer>().material = frame_mat;
+
+        // switch of window shadows
+        top.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        bottom.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        left.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        right.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
     }
 
