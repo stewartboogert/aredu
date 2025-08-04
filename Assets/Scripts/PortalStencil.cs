@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Numerics;
 
-public class Portal : MonoBehaviour
+public class PortalStencil : MonoBehaviour
 {
     public GameObject parentObject;
     public float width = 1f;
